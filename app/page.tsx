@@ -1,4 +1,5 @@
 // page.tsx
+"use client";
 import { useState } from 'react';
 import prisma from "@/lib/db";
 
