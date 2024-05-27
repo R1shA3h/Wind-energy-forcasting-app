@@ -9,9 +9,12 @@
     "seed": "npm run prisma/seed.js",
     "devStart": "nodemon scripts.ts",
     "dev": "next dev",
-    "build": "next build",
+    "build": "npx prisma generate && npx prisma migrate deploy && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate",
+    "vercel-build":"mpx prisma generate && npx prisma migrate deploy && next build"
+    
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
