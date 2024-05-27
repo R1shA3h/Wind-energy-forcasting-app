@@ -3,10 +3,22 @@
 import { useState } from 'react';
 import prisma from "@/lib/db";
 
-export default function Home() {
+async function getPosts(){
+  const windact = await prisma.windActual.findMany({
+    where: {
+      startTime: "2024-01-01T01:00:00Z",
+  },
+  select:{
+    generation:true
+  }
+});
+return windact;
+}
+
+export default async function Home() {
   const [dateInput, setDateInput] = useState('');
   const [generation, setGeneration] = useState<number | null>(null);
-
+  const windact = await getPosts();
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDateInput(event.target.value);
   };
