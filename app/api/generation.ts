@@ -1,8 +1,7 @@
 // pages/api/generation.ts
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/db';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -15,23 +14,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Fetch the generation data from the 'windforecast' table
     const generationData = await prisma.windActual.findMany({
       where: {
-        AND: [
-          {
             startTime: {
               gte: new Date(formattedDateTime),
             },
           },
-        ],
-      },
       select: {
         generation: true,
       },
     });
 
-    // Respond with the fetched data
-    res.status(200).json(generationData);
+    if (generationData.length > 0) {
+      res.status(200).json({ generation: generationData[0].generation });
+    } else {
+      res.status(404).json({ error: "No generation data found for the given date and time" });
+    }
   } catch (error) {
-    // Handle any errors
     res.status(500).json({ error: "Error fetching generation data" });
   }
 }

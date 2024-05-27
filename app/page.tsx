@@ -21,7 +21,7 @@ export default function Home() {
       body: JSON.stringify({ dateInput }),
     });
     const data = await response.json();
-    setGeneration(data.generation);
+    setGeneration(data[0]?.generation);
   };
 
   return (
